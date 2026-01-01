@@ -1,0 +1,7 @@
+{
+  "name": "Excel Escape Room - Mission Tracker",
+  "description": "A gamified training platform to track Excel-based missions, featuring a real-time leaderboard, mission dashboard, and secure evidence submission.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
