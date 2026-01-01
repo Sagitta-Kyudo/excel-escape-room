@@ -1,72 +1,48 @@
+
 import { read, utils } from 'xlsx';
 import { LeaderboardEntry, RawDataRow } from '../types';
-import { TRAINING_CODE } from '../constants';
+import { TRAINING_CODE, UPLOAD_FOLDER_URL } from '../constants';
 
-// The SharePoint/OneDrive Direct Download Link 
-// (Note: Standard share links often return HTML, not the file itself. 
-// You may need a direct download URL or a proxy for production).
 const EXCEL_FILE_URL = "https://agileterraforming-my.sharepoint.com/:x:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IQBN85_ozme9S5ExHT7Q4EReAfR5bpHPSG7BinO-KVmhvis?e=uiWwHr&download=1";
-
-const STORAGE_KEY = 'excel_escape_rawdata_v1_2_0';
+const STORAGE_KEY = 'excel_escape_rawdata_v1_3_0';
 
 export const getLeaderboardData = async (): Promise<LeaderboardEntry[]> => {
   let allRows: RawDataRow[] = [];
-
   try {
-    // 1. Attempt to fetch real Excel file
-    console.log("Fetching live leaderboard from Excel...");
     const response = await fetch(EXCEL_FILE_URL);
-    
-    if (!response.ok) throw new Error("Network response was not ok");
-    
-    const arrayBuffer = await response.arrayBuffer();
-    
-    // 2. Parse Excel Data
-    const workbook = read(arrayBuffer);
-    
-    // Assume data is in the first sheet or a sheet named "t_rawdata"
-    const sheetName = workbook.SheetNames.find(n => n.toLowerCase().includes('raw')) || workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    
-    // Convert to JSON
-    const jsonData = utils.sheet_to_json<any>(worksheet);
-    
-    // Map Excel columns to our RawDataRow type (handling varying column names if necessary)
-    allRows = jsonData.map(row => ({
-      training_code: row['Training_Code'] || row['training_code'],
-      team: row['Team'] || row['team'],
-      mission_id: row['Mission'] ? parseInt(row['Mission'].replace('M0','')) : 0,
-      mission_name: row['Mission'] || '',
-      points: Number(row['Score']) || 0,
-      time_taken: Number(row['Time_Taken']) || 0,
-      timestamp: row['Submission_DateTime'] || '',
-      file_name: 'synced_from_excel'
-    }));
-
+    if (response.ok) {
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = read(arrayBuffer);
+      const sheetName = workbook.SheetNames.find(n => n.toLowerCase().includes('raw')) || workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = utils.sheet_to_json<any>(worksheet);
+      allRows = jsonData.map(row => ({
+        training_code: row['Training_Code'] || row['training_code'],
+        team: row['Team'] || row['team'],
+        mission_id: row['Mission'] ? parseInt(String(row['Mission']).replace('M0','')) : 0,
+        mission_name: row['Mission'] || '',
+        points: Number(row['Score'] || row['points']) || 0,
+        time_taken: Number(row['Time_Taken'] || row['time_taken']) || 0,
+        timestamp: row['Submission_DateTime'] || row['timestamp'] || '',
+        file_name: 'synced_from_excel'
+      }));
+    } else { throw new Error("Fetch failed"); }
   } catch (error) {
-    console.warn("Live Excel fetch failed (likely CORS or Auth). Falling back to local simulation.", error);
-    // Fallback to LocalStorage if Excel fetch fails
+    console.warn("Falling back to local simulation.", error);
     allRows = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   }
 
-  // 3. Process Data (Filter & Aggregate)
   const activeData = allRows.filter(row => row.training_code === TRAINING_CODE);
-  
   const teamStats: Record<string, { missionsDone: number; totalPoints: number; totalTime: number }> = {};
 
   activeData.forEach(row => {
-    // Normalize team name to avoid "Team Alpha" vs "Team  Alpha" issues
-    const teamName = row.team ? row.team.trim() : "Unknown";
-    
-    if (!teamStats[teamName]) {
-      teamStats[teamName] = { missionsDone: 0, totalPoints: 0, totalTime: 0 };
-    }
+    const teamName = (row.team || "Unknown").trim();
+    if (!teamStats[teamName]) teamStats[teamName] = { missionsDone: 0, totalPoints: 0, totalTime: 0 };
     teamStats[teamName].missionsDone += 1;
-    teamStats[teamName].totalPoints += row.points;
-    teamStats[teamName].totalTime += row.time_taken;
+    teamStats[teamName].totalPoints += (row.points || 0);
+    teamStats[teamName].totalTime += (row.time_taken || 0);
   });
 
-  // 4. Sort and Return
   return Object.entries(teamStats)
     .map(([name, stats]) => ({
       name,
@@ -74,33 +50,44 @@ export const getLeaderboardData = async (): Promise<LeaderboardEntry[]> => {
       totalPoints: stats.totalPoints,
       lastTime: formatSecondsToMMSS(stats.totalTime)
     }))
-    .sort((a, b) => {
-      if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
-      return a.name.localeCompare(b.name);
-    });
+    .sort((a, b) => b.totalPoints - a.totalPoints || a.name.localeCompare(b.name));
 };
 
-/**
- * Helper: Format Seconds
- */
+export const submitMissionEvidence = async (team: string, missionId: number, missionName: string, timeTaken: number, file: File): Promise<boolean> => {
+  const now = new Date();
+  const timestamp = now.getFullYear().toString() + (now.getMonth() + 1).toString().padStart(2, '0') + now.getDate().toString().padStart(2, '0') + "_" + now.getHours().toString().padStart(2, '0') + now.getMinutes().toString().padStart(2, '0') + now.getSeconds().toString().padStart(2, '0');
+  const safeTeam = team.replace(/[^a-zA-Z0-9]/g, '_');
+  const extension = file.name.split('.').pop() || 'xlsx';
+  const finalFileName = `${safeTeam}_M0${missionId}_${timeTaken}s_${timestamp}.${extension}`;
+
+  console.log(`[SHAREPOINT_UPLOAD_SIM] TARGET: ${UPLOAD_FOLDER_URL}`);
+  console.log(`[FILE_CONVENTION] NAME: ${finalFileName}`);
+
+  await new Promise(r => setTimeout(r, 2000));
+
+  const newRow: RawDataRow = {
+    training_code: TRAINING_CODE,
+    team: team,
+    mission_id: missionId,
+    mission_name: missionName,
+    points: 1,
+    time_taken: timeTaken,
+    timestamp: timestamp,
+    file_name: finalFileName
+  };
+
+  try {
+    const existing: RawDataRow[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    existing.push(newRow);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 const formatSecondsToMMSS = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-
-/**
- * Keep your existing submitMissionEvidence logic exactly as is!
- * (I have omitted it here for brevity, but don't delete it from your file)
- */
-export const submitMissionEvidence = async (team: string, missionId: number, missionName: string, timeTaken: number, file: File): Promise<boolean> => {
-    // ... Copy your existing submit logic here ...
-    // Since we can't write to the real Excel file from browser without an API backend,
-    // we keep writing to LocalStorage so the user sees their own progress immediately.
-    
-    // 1. Mandatory File Naming Pattern...
-    // [Paste your original submitMissionEvidence code here]
-    
-    // This ensures the user feels the app is working even if the Excel read is read-only.
-    return true; 
 };

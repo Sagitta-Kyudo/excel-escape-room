@@ -3,7 +3,7 @@ import React from 'react';
 import { Mission } from './types';
 
 export const TRAINING_CODE = "ExcelEscape_202601";
-export const APP_VERSION = "1.1.0"; 
+export const APP_VERSION = "1.4.0"; 
 
 // Latest SharePoint Upload URL
 export const UPLOAD_FOLDER_URL = "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgAIOQuwu-40Q5UOND7AFchEAaNfQoJGIvqjRD7jWPS7jMU?e=IEqkt6";
@@ -14,41 +14,41 @@ export const MISSIONS: Mission[] = [
     id: 1, 
     name: "Data Integrity Audit", 
     objective: "Identify and fix all data corruptions in the PO Log. Cross-reference with the Employee list to find unauthorized requestors (terminated staff).", 
-    duration: 1800,
+    duration: 50,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgC6vZYppH1-R5CviyeNET2TAYZpauJkhv8qBMOslKVHxB4?e=JSGsck" 
   },
   { 
     id: 2, 
     name: "Financial Enrichment", 
     objective: "Link the Approval Limits to the PO Log. Calculate and highlight all limit breaches where requestors exceeded their authorized spending levels.", 
-    duration: 1800,
+    duration: 50,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgAtS_0j905jS7IFiN7ME0GdAU2M8f1uE3sGw4GiC5upoj4?e=ZY7F64" 
   },
   { 
     id: 3, 
     name: "Leakage Analysis", 
     objective: "Generate a summary report highlighting the top 3 risky vendors based on rejection rates and total invoice volume.", 
-    duration: 1800,
+    duration: 50,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBcfOpmq_FcR4xsF8E4AXKJAXAxkPNA8E4Ac-YDf2ENiuA?e=EnrJPY" 
   },
   { 
     id: 4, 
     name: "Control Tower", 
     objective: "Create a dynamic dashboard template with Slicers for Dept_Code and Vendor_Name to monitor spend versus budget real-time.", 
-    duration: 1800,
+    duration: 50,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBt_-CSrLOjTKNIPCb05xVgAZedJ_Z_2EHB8yo7JCU7jaI?e=9O3Vvg" 
   },
   { 
     id: 5, 
     name: "Executive Briefing", 
     objective: "Prepare a 3-slide CEO presentation using AI to summarize findings and propose a system upgrade to prevent future leakage.", 
-    duration: 1800,
+    duration: 50,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBCCXHoVV5XSY6xc-VtLVirAWnhDiFqgiIpIUngOC7VhiQ?e=wwHOTM" 
   }
 ];
 
-export const MISSION_OVERTIME = 120;
-export const BRIEFING_DURATION = 300;
+export const MISSION_OVERTIME = 40;
+export const BRIEFING_DURATION = 40;
 
 export const Icons = {
   Lock: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
