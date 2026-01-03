@@ -19,10 +19,18 @@ export interface RawDataRow {
   team: string;
   mission_id: number;
   mission_name: string;
+  action: 'Submission' | 'Bonus' | 'Correct Answer' | string;
   points: number;
   time_taken: number;
   timestamp: string;
   file_name: string;
+}
+
+export interface ReleaseNote {
+  version: string;
+  date: string;
+  type: 'Major' | 'Minor' | 'Patch';
+  changes: string[];
 }
 
 export type AppView = 'login' | 'dashboard' | 'briefing' | 'active' | 'completed' | 'billboard';
