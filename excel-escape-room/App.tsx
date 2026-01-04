@@ -260,7 +260,6 @@ const App: React.FC = () => {
     if (editingIndex !== null && editForm) {
       const updated = [...adminRecords];
       
-      // Auto-extract mission ID from name if needed
       const match = editForm.mission_name.match(/M(\d+)/i);
       const missionId = match ? parseInt(match[1]) : editForm.mission_id;
       
@@ -528,7 +527,7 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto">
             <header className="mb-16 pb-10 flex justify-between items-start border-b border-slate-900/50">
               <div>
-                <p className="text-cyan-500 font-mono text-[10px] tracking-[0.3em] mb-2 uppercase font-bold text-cyan-400">AGENT > {teamName || 'UNKNOWN'}</p>
+                <p className="text-cyan-500 font-mono text-[10px] tracking-[0.3em] mb-2 uppercase font-bold text-cyan-400">AGENT &gt; {teamName || 'UNKNOWN'}</p>
                 <h1 className="text-5xl font-black tracking-tighter uppercase text-white leading-none">Mission Control</h1>
               </div>
               <div className="text-right flex flex-col items-end">
@@ -674,7 +673,7 @@ const App: React.FC = () => {
                     {isUploading ? (
                       <div className="w-full space-y-8 px-8">
                         <div className="bg-black p-10 rounded-[32px] text-left font-mono text-[10px] text-cyan-400 h-56 overflow-y-auto custom-scrollbar border border-cyan-900/30">
-                          {verificationLog.map((log, i) => <div key={i} className="mb-2 leading-tight tracking-widest">{`[SECURE_SYNC] > ${log}`}</div>)}
+                          {verificationLog.map((log, i) => <div key={i} className="mb-2 leading-tight tracking-widest">{`[SECURE_SYNC] &gt; ${log}`}</div>)}
                         </div>
                         <div className="h-1 bg-slate-900 w-full rounded-full overflow-hidden"><div className="h-full bg-cyan-500 animate-[progress_1.5s_linear_infinite]" /></div>
                       </div>

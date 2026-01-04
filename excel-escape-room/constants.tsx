@@ -3,7 +3,7 @@ import React from 'react';
 import { Mission } from './types';
 
 export const TRAINING_CODE = "ExcelEscape_202601";
-export const APP_VERSION = "1.7.3"; 
+export const APP_VERSION = "1.7.4"; 
 
 // Latest SharePoint Upload URL
 export const UPLOAD_FOLDER_URL = "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgAIOQuwu-40Q5UOND7AFchEAaNfQoJGIvqjRD7jWPS7jMU?e=IEqkt6";

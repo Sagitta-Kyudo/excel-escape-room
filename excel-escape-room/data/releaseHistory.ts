@@ -3,6 +3,17 @@ import { ReleaseNote } from '../types';
 
 export const RELEASE_HISTORY: ReleaseNote[] = [
   {
+    version: "1.7.4",
+    date: "2026-01-04 03:23",
+    type: "Patch",
+    changes: [
+      "Vite Build Fix: Resolved critical JSX character error (illegal '>' character) during production compilation.",
+      "Admin Panel Stability: Enhanced Delete handler logic for immediate data vault synchronization.",
+      "UI Refinement: Escaped special characters in Mission Control dashboard for strict browser compatibility.",
+      "Release Logging: Standardized timestamp format as per requested audit guidelines."
+    ]
+  },
+  {
     version: "1.7.3",
     date: "2026-01-04 03:23",
     type: "Patch",

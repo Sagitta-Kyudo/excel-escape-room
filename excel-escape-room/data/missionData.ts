@@ -13,7 +13,7 @@ export const INITIAL_MISSION_DATA: RawDataRow[] = [
     mission_id: 1,
     mission_name: "M01",
     action: "Bonus",
-    points: 3,
+    points: 2,
     time_taken: 0,
     timestamp: "2024-05-31 08:55:00",
     file_name: "manual_bonus.xlsx"
