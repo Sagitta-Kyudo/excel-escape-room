@@ -1,54 +1,52 @@
-
 import React from 'react';
 import { Mission } from './types';
 
 export const TRAINING_CODE = "ExcelEscape_202601";
-export const APP_VERSION = "1.7.4"; 
+export const APP_VERSION = "1.8.4"; 
 
 // Latest SharePoint Upload URL
 export const UPLOAD_FOLDER_URL = "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgAIOQuwu-40Q5UOND7AFchEAaNfQoJGIvqjRD7jWPS7jMU?e=IEqkt6";
-export const EXCEL_DB_URL = "https://agileterraforming-my.sharepoint.com/:x:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IQBN85_ozme9S5ExHT7Q4EReAfR5bpHPSG7BinO-KVmhvis?e=uiWwHr";
 
 export const MISSIONS: Mission[] = [
   { 
     id: 1, 
     name: "Data Integrity Audit", 
     objective: "Identify and fix all data corruptions in the PO Log. Cross-reference with the Employee list to find unauthorized requestors (terminated staff).", 
-    duration: 50,
+    duration: 1800, // 30 Minutes
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgC6vZYppH1-R5CviyeNET2TAYZpauJkhv8qBMOslKVHxB4?e=JSGsck" 
   },
   { 
     id: 2, 
     name: "Financial Enrichment", 
     objective: "Link the Approval Limits to the PO Log. Calculate and highlight all limit breaches where requestors exceeded their authorized spending levels.", 
-    duration: 50,
+    duration: 1800,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgAtS_0j905jS7IFiN7ME0GdAU2M8f1uE3sGw4GiC5upoj4?e=ZY7F64" 
   },
   { 
     id: 3, 
     name: "Leakage Analysis", 
     objective: "Generate a summary report highlighting the top 3 risky vendors based on rejection rates and total invoice volume.", 
-    duration: 50,
+    duration: 1800,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBcfOpmq_FcR4xsF8E4AXKJAXAxkPNA8E4Ac-YDf2ENiuA?e=EnrJPY" 
   },
   { 
     id: 4, 
     name: "Control Tower", 
     objective: "Create a dynamic dashboard template with Slicers for Dept_Code and Vendor_Name to monitor spend versus budget real-time.", 
-    duration: 50,
+    duration: 1800,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBt_-CSrLOjTKNIPCb05xVgAZedJ_Z_2EHB8yo7JCU7jaI?e=9O3Vvg" 
   },
   { 
     id: 5, 
     name: "Executive Briefing", 
     objective: "Prepare a 3-slide CEO presentation using AI to summarize findings and propose a system upgrade to prevent future leakage.", 
-    duration: 50,
+    duration: 1800,
     datasetUrl: "https://agileterraforming-my.sharepoint.com/:f:/g/personal/ecopoiesis_agileterraforming_onmicrosoft_com/IgBCCXHoVV5XSY6xc-VtLVirAWnhDiFqgiIpIUngOC7VhiQ?e=wwHOTM" 
   }
 ];
 
-export const MISSION_OVERTIME = 40;
-export const BRIEFING_DURATION = 40;
+export const MISSION_OVERTIME = 120; // 2 Minutes Grace
+export const BRIEFING_DURATION = 60;
 
 export const Icons = {
   Lock: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
@@ -77,5 +75,8 @@ export const Icons = {
   Trash: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>,
   Edit: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
   Database: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>,
-  Copy: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+  Copy: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>,
+  FileSpreadsheet: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></svg>,
+  FileCode: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m10 13-2 2 2 2"/><path d="m14 17 2-2-2-2"/></svg>,
+  Sparkles: (props: any) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
 };

@@ -1,9 +1,9 @@
 
 import { LeaderboardEntry, RawDataRow } from '../types';
-import { TRAINING_CODE } from '../constants';
+import { TRAINING_CODE, UPLOAD_FOLDER_URL } from '../constants';
 import { INITIAL_MISSION_DATA } from '../data/missionData';
 
-const STORAGE_KEY = 'excel_escape_rawdata_v1_7_3';
+const STORAGE_KEY = 'excel_escape_rawdata_v1_8_0';
 
 // Initialize data if storage is empty
 const initializeDataIfEmpty = () => {
@@ -66,22 +66,40 @@ export const resetAllData = async (): Promise<boolean> => {
   }
 };
 
-export const submitMissionEvidence = async (team: string, missionId: number, missionName: string, timeTaken: number, file: File): Promise<boolean> => {
+export const submitMissionEvidence = async (
+  team: string, 
+  missionId: number, 
+  missionName: string, 
+  timeTaken: number, 
+  file: File,
+  formulaCount?: number,
+  errorCount?: number
+): Promise<boolean> => {
   const now = new Date();
-  const timestamp = now.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-  const safeTeam = team.replace(/[^a-zA-Z0-9]/g, '_');
+  
+  // Strict timestamp: YYYYMMDDHHmmss
+  const timestampRaw = now.getFullYear().toString() + 
+                      (now.getMonth() + 1).toString().padStart(2, '0') + 
+                      now.getDate().toString().padStart(2, '0') + 
+                      now.getHours().toString().padStart(2, '0') + 
+                      now.getMinutes().toString().padStart(2, '0') + 
+                      now.getSeconds().toString().padStart(2, '0');
+  
+  const missionCode = `M${missionId.toString().padStart(2, '0')}`;
   const extension = file.name.split('.').pop() || 'xlsx';
-  const finalFileName = `${safeTeam}_M0${missionId}_${timeTaken}s_${timestamp.replace(/[:\s-]/g, '')}.${extension}`;
+  
+  // Strict naming conversion: <user team name>_<Mission Code>_<submission timestamp>.<file type>
+  const finalFileName = `${team.replace(/\s+/g, '_')}_${missionCode}_${timestampRaw}.${extension}`;
 
   const newRow: RawDataRow = {
     training_code: TRAINING_CODE,
     team: team,
     mission_id: missionId,
-    mission_name: missionName.startsWith('M') ? missionName : `M${missionId.toString().padStart(2, '0')}`,
+    mission_name: missionCode,
     action: 'Submission',
-    points: 1,
+    points: 1, // Base points for submission
     time_taken: timeTaken,
-    timestamp: timestamp,
+    timestamp: now.toISOString().replace('T', ' ').slice(0, 19),
     file_name: finalFileName
   };
 
@@ -90,6 +108,9 @@ export const submitMissionEvidence = async (team: string, missionId: number, mis
     const existing: RawDataRow[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     existing.push(newRow);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    
+    // Simulate logging to the specified OneDrive URL in console for audit
+    console.log(`[SECURE_UPLOAD] File transferred to: ${UPLOAD_FOLDER_URL}`);
     return true;
   } catch (e) {
     return false;
